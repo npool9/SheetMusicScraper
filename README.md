@@ -4,6 +4,6 @@ A simple BeautifulSoup web-scraping script that retrieves the publically availab
 
 ### To Execute
 1. Provide the absolute path at which you'd like the dataset of sheet music to be saved.
-2. Run music_scraper.py
+2. Run sheetmusic_scraper.py
 
 ##### Note: The compositions are saved in subdirectories of the provided path based on their composers.
