@@ -93,4 +93,5 @@ class SheetMusicScraper:
 
 if __name__ == "__main__":
     sheet_scraper = SheetMusicScraper()
-    sheet_scraper.scrape("/Users/nathanpool/Desktop/Projects4Fun/Music/Datasets/SheetMusic/")
+    path = input("Enter the path at which you'd like the dataset to be saved:\n")
+    sheet_scraper.scrape(path)
