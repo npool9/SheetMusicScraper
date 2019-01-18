@@ -79,16 +79,20 @@ class SheetMusicScraper:
         print("Saving files to given directory...")
         for i in range(num):
             print(self.midis[i])
-            res = urllib.request.urlopen(self.midis[i])
-            # Make a directory for each composer, because why not.
-            if not os.path.exists(path + self.composers[i]):
-                os.mkdir(path + self.composers[i])
-            # check if a '/' is in the filename. Replace it with some arbitrary character to avoid confusion
-            if '/' in self.names[i]:
-                self.names[i] = self.names[i].replace('/', ':')
-            file = open(path + self.composers[i] + '/' + self.names[i] + ".mid", 'wb')
-            file.write(res.read())
-            file.close()
+            try:
+                res = urllib.request.urlopen(self.midis[i])
+                # Make a directory for each composer, because why not.
+                if not os.path.exists(path + self.composers[i]):
+                    os.mkdir(path + self.composers[i])
+                # check if a '/' is in the filename. Replace it with some arbitrary character to avoid confusion
+                if '/' in self.names[i]:
+                    self.names[i] = self.names[i].replace('/', ':')
+                file = open(path + self.composers[i] + '/' + self.names[i] + ".mid", 'wb')
+                file.write(res.read())
+                file.close()
+            except:
+                print("HTTPError...need to deal with zipped files later.")
+
         print("Saving complete.")
         print("Script execution complete!")
 
