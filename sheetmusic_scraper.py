@@ -4,7 +4,7 @@ import os
 import re
 
 """
-Here is a script that scrapes the Mutopia Project at mutopiaproject.org for sheet music. The pdf files will be saved
+Here is a script that scrapes the Mutopia Project at mutopiaproject.org for sheet music. The jpg files will be saved
 to a directory located at the path provided by the user at the bottom.
 """
 
@@ -12,7 +12,7 @@ to a directory located at the path provided by the user at the bottom.
 class SheetMusicScraper:
 
     def __init__(self):
-        self.pdfs = []
+        self.jpgs = []
         self.names = []
         self.composers = []
 
@@ -45,7 +45,7 @@ class SheetMusicScraper:
                 try:
                     ex = re.search(r'(<td><a href).*Letter \.pdf', box)
                     pdf_link = ex.group(0)[13:-13]
-                    self.pdfs.append(pdf_link)
+                    self.jpgs.append(pdf_link)
                     ex = re.search(r'<tr><td>(.*)</td>', box)
                     name = ex.group(1)
                     self.names.append(name)
@@ -66,25 +66,25 @@ class SheetMusicScraper:
 
         # Now that we have the list of links that download the pdfs, we must request them and save them
         num = 0
-        if (len(self.pdfs) == len(self.names)) and (len(self.pdfs) == len(self.composers)):
+        if (len(self.jpgs) == len(self.names)) and (len(self.jpgs) == len(self.composers)):
             print("Length check: Passed :)")
-            num = len(self.pdfs)
+            num = len(self.jpgs)
         else:
             print("Length check: Failed :(")
-            print("PDFs Length:", len(self.pdfs))
+            print("JPGs Length:", len(self.jpgs))
             print("Names Length:", len(self.names))
             print("Composers Length:", len(self.composers))
             exit(0)
         print("Saving files to given directory...")
         for i in range(num):
-            res = urllib.request.urlopen(self.pdfs[i])
+            res = urllib.request.urlopen(self.jpgs[i])
             # Make a directory for each composer, because why not.
             if not os.path.exists(path + self.composers[i]):
                 os.mkdir(path + self.composers[i])
             # check if a '/' is in the filename. Replace it with some arbitrary character to avoid confusion
             if '/' in self.names[i]:
                 self.names[i] = self.names[i].replace('/', ':')
-            file = open(path + self.composers[i] + '/' + self.names[i], 'wb')
+            file = open(path + self.composers[i] + '/' + self.names[i] + '.jpg', 'wb')
             file.write(res.read())
             file.close()
         print("Saving complete.")
