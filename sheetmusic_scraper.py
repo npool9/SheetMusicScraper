@@ -13,6 +13,7 @@ to a directory located at the path provided by the user at the bottom.
 class SheetMusicScraper:
 
     def __init__(self):
+        self.save_jpeg = input("Would you like the sheet music to be saved as jpegs (y/n)?\n")
         self.jpgs = []
         self.names = []
         self.composers = []
@@ -89,11 +90,12 @@ class SheetMusicScraper:
             file.write(res.read())
             file.close()
             # Now convert saved pdf to jpg
-            pages = convert_from_path(path + self.composers[i] + '/' + self.names[i] + '.pdf', 500)
-            page_count = 1
-            for page in pages:
-                page.save(path + self.composers[i] + '/' + self.names[i] + 'Page' + str(page_count) + '.jpg', 'JPEG')
-                page_count += 1
+            if self.save_jpeg.lower()[0] == 'y':
+                pages = convert_from_path(path + self.composers[i] + '/' + self.names[i] + '.pdf', 500)
+                page_count = 1
+                for page in pages:
+                    page.save(path + self.composers[i] + '/' + self.names[i] + 'Page' + str(page_count) + '.jpg', 'JPEG')
+                    page_count += 1
         print("Saving complete.")
         print("Script execution complete!")
 
