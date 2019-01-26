@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import os
 import re
+from pdf2image import convert_from_path
 
 """
 Here is a script that scrapes the Mutopia Project at mutopiaproject.org for sheet music. The jpg files will be saved
@@ -84,9 +85,15 @@ class SheetMusicScraper:
             # check if a '/' is in the filename. Replace it with some arbitrary character to avoid confusion
             if '/' in self.names[i]:
                 self.names[i] = self.names[i].replace('/', ':')
-            file = open(path + self.composers[i] + '/' + self.names[i] + '.jpg', 'wb')
+            file = open(path + self.composers[i] + '/' + self.names[i] + '.pdf', 'wb')  # must save as pdf first
             file.write(res.read())
             file.close()
+            # Now convert saved pdf to jpg
+            pages = convert_from_path(path + self.composers[i] + '/' + self.names[i] + '.pdf', 500)
+            page_count = 1
+            for page in pages:
+                page.save(path + self.composers[i] + '/' + self.names[i] + 'Page' + str(page_count) + '.jpg', 'JPEG')
+                page_count += 1
         print("Saving complete.")
         print("Script execution complete!")
 
@@ -94,4 +101,6 @@ class SheetMusicScraper:
 if __name__ == "__main__":
     sheet_scraper = SheetMusicScraper()
     path = input("Enter the path at which you'd like the dataset to be saved:\n")
+    if not path.endswith('/'):
+        path += '/'
     sheet_scraper.scrape(path)
